@@ -6,11 +6,13 @@
 #    By: arohmann <arohmann@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/17 11:04:41 by arohmann          #+#    #+#              #
-#    Updated: 2021/06/30 17:42:25 by arohmann         ###   ########.fr        #
+#    Updated: 2021/11/12 12:32:04 by arohmann         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
+
+OBJDIR = obj
 
 CFLAGS = -Wall -Werror -Wextra -c
 SRC = ft_atoi.c \
@@ -22,6 +24,8 @@ ft_isascii.c \
 ft_isdigit.c \
 ft_isprint.c \
 ft_itoa.c \
+ft_atod_bonus.c \
+ft_atol_bonus.c \
 ft_memccpy.c \
 ft_memchr.c \
 ft_memcmp.c \
@@ -33,6 +37,7 @@ ft_putendl_fd.c \
 ft_putnbr_fd.c \
 ft_putstr_fd.c \
 ft_split.c \
+ft_free_split_bonus.c \
 ft_strchr.c \
 ft_strdup.c \
 ft_strjoin.c \
@@ -41,6 +46,7 @@ ft_strlcpy.c \
 ft_strlen.c \
 ft_strmapi.c \
 ft_strncmp.c \
+ft_strcmp_bonus.c \
 ft_strnstr.c \
 ft_strrchr.c \
 ft_strtrim.c \
@@ -58,21 +64,23 @@ ft_lstclear.c \
 ft_lstiter.c \
 ft_lstmap.c
 
+OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
+OBJ_B = $(BONI:%.c=$(OBJDIR)/%.o)
 
-all: $(NAME) bonus
+all: bonus
 	
-$(NAME):
-	gcc $(CFLAGS) $(SRC)
-	ar -crs $(NAME) ft_*.o
-	ar -t $(NAME)
-	
-bonus:
-	gcc $(CFLAGS) ft_*.c
-	ar -crs $(NAME) ft_*.o
-	ar -t $(NAME)
+$(NAME): $(OBJ)
+	ar -crs $(NAME) $(OBJDIR)/*.o
+
+$(OBJDIR)/%.o: %.c
+	@mkdir -p $(OBJDIR)
+	$(CC) -c $(CFLAGS) $< -o $@
+
+bonus: $(OBJ) $(OBJ_B)
+	ar -crs $(NAME) $(OBJDIR)/*.o
 
 clean:
-	rm -f *.o *~
+	rm -rf $(OBJDIR)
 
 fclean: clean
 	rm -f $(NAME)
